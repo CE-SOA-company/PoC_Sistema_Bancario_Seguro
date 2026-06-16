@@ -1,0 +1,350 @@
+{
+  "info": {
+    "_postman_id": "3d0c9f6b-5b6e-4ce4-b3d1-6e4c4e8a7f10",
+    "name": "SecureBankito API Demo",
+    "description": "Collection de pruebas para Swagger/Postman de la PoC SecureBankito.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "IAM",
+      "item": [
+        {
+          "name": "Login admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{iamBaseUrl}}/auth/login",
+              "host": [
+                "{{iamBaseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}"
+            },
+            "description": "Obtiene un JWT con clearance_level e integrity_level."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.test('Returns access token', function () {",
+                  "  pm.expect(body).to.have.property('access_token');",
+                  "});",
+                  "pm.environment.set('accessToken', body.access_token);"
+                ]
+              }
+            }
+          ]
+            },
+            {
+              "name": "Login bronze",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{iamBaseUrl}}/auth/login",
+                  "host": [
+                    "{{iamBaseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"bronze\",\n  \"password\": \"bronze123\"\n}"
+                },
+                "description": "Obtiene un JWT de clearance e integridad Bronce para probar el 403 de Biba."
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Status 200', function () {",
+                      "  pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "const body = pm.response.json();",
+                      "pm.environment.set('bronzeToken', body.access_token);"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Login plata",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{iamBaseUrl}}/auth/login",
+                  "host": [
+                    "{{iamBaseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"plata\",\n  \"password\": \"plata123\"\n}"
+                },
+                "description": "Obtiene un JWT de clearance Plata para probar el 403 de Bell-LaPadula."
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Status 200', function () {",
+                      "  pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "const body = pm.response.json();",
+                      "pm.environment.set('plataToken', body.access_token);"
+                    ]
+                  }
+                }
+              ]
+        }
+      ]
+    },
+    {
+      "name": "Bank",
+      "item": [
+        {
+          "name": "Deposit allowed",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{bankBaseUrl}}/bank/deposit",
+              "host": [
+                "{{bankBaseUrl}}"
+              ],
+              "path": [
+                "bank",
+                "deposit"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"account_id\": \"gold-001\",\n  \"amount\": 50.0\n}"
+            },
+            "description": "Escenario exitoso: el JWT del login aporta la integridad requerida para escribir."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Contains transaction id', function () {",
+                  "  pm.expect(pm.response.json()).to.have.property('transaction_id');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Deposit forbidden - Biba",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bronzeToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{bankBaseUrl}}/bank/deposit",
+              "host": [
+                "{{bankBaseUrl}}"
+              ],
+              "path": [
+                "bank",
+                "deposit"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"account_id\": \"gold-001\",\n  \"amount\": 25.0\n}"
+            },
+            "description": "Escenario de defensa: la integridad viene del JWT; si es insuficiente, el servicio responde 403."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 403', function () {",
+                  "  pm.response.to.have.status(403);",
+                  "});",
+                  "pm.test('No Write Up message', function () {",
+                  "  pm.expect(pm.response.text()).to.include('No Write Up');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Investment",
+      "item": [
+        {
+          "name": "List assets allowed",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{investmentBaseUrl}}/investments/assets",
+              "host": [
+                "{{investmentBaseUrl}}"
+              ],
+              "path": [
+                "investments",
+                "assets"
+              ]
+            },
+            "description": "Escenario exitoso: el JWT del login aporta el clearance requerido para listar activos."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Returns a list', function () {",
+                  "  pm.expect(pm.response.json()).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List assets forbidden - Bell-LaPadula",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{plataToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{investmentBaseUrl}}/investments/assets",
+              "host": [
+                "{{investmentBaseUrl}}"
+              ],
+              "path": [
+                "investments",
+                "assets"
+              ]
+            },
+            "description": "Escenario de defensa: el clearance viene del JWT; si es insuficiente, el servicio responde 403."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 403', function () {",
+                  "  pm.response.to.have.status(403);",
+                  "});",
+                  "pm.test('No Read Up message', function () {",
+                  "  pm.expect(pm.response.text()).to.include('No Read Up');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "iamBaseUrl",
+      "value": "http://localhost:8001"
+    },
+    {
+      "key": "bankBaseUrl",
+      "value": "http://localhost:8002"
+    },
+    {
+      "key": "investmentBaseUrl",
+      "value": "http://localhost:8003"
+    },
+    {
+      "key": "accessToken",
+      "value": ""
+    }
+  ]
+}

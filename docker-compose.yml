@@ -1,0 +1,80 @@
+services:
+  postgres-iam:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: iam_db
+      POSTGRES_USER: iam_user
+      POSTGRES_PASSWORD: iam_pass
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-iam-data:/var/lib/postgresql/data
+
+  postgres-bank:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: bank_db
+      POSTGRES_USER: bank_user
+      POSTGRES_PASSWORD: bank_pass
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres-bank-data:/var/lib/postgresql/data
+
+  postgres-investment:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: investment_db
+      POSTGRES_USER: investment_user
+      POSTGRES_PASSWORD: investment_pass
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres-investment-data:/var/lib/postgresql/data
+
+  iam-service:
+    build:
+      context: .
+      dockerfile: iam-service/Dockerfile
+    depends_on:
+      - postgres-iam
+    ports:
+      - "8001:8000"
+    environment:
+      - APP_NAME=iam-service
+      - DATABASE_URL=postgresql+psycopg2://iam_user:iam_pass@postgres-iam:5432/iam_db
+      - JWT_SECRET=securebankito-dev-secret
+      - JWT_ALGORITHM=HS256
+
+  bank-service:
+    build:
+      context: .
+      dockerfile: bank-service/Dockerfile
+    depends_on:
+      - postgres-bank
+    ports:
+      - "8002:8000"
+    environment:
+      - APP_NAME=bank-service
+      - DATABASE_URL=postgresql+psycopg2://bank_user:bank_pass@postgres-bank:5432/bank_db
+      - JWT_SECRET=securebankito-dev-secret
+      - JWT_ALGORITHM=HS256
+
+  investment-service:
+    build:
+      context: .
+      dockerfile: investment-service/Dockerfile
+    depends_on:
+      - postgres-investment
+    ports:
+      - "8003:8000"
+    environment:
+      - APP_NAME=investment-service
+      - DATABASE_URL=postgresql+psycopg2://investment_user:investment_pass@postgres-investment:5432/investment_db
+      - JWT_SECRET=securebankito-dev-secret
+      - JWT_ALGORITHM=HS256
+
+volumes:
+  postgres-iam-data:
+  postgres-bank-data:
+  postgres-investment-data:
