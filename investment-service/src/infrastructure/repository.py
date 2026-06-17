@@ -6,7 +6,13 @@ from src.infrastructure.models import AssetModel
 
 
 class AssetRepository:
+    """
+    Repositorio para acceder a los modelos de activos de inversión.
+    """
     def list_all(self) -> list[ActivoInversion]:
+        """
+        Lista todos los activos de inversión disponibles en la base de datos y los devuelve como una lista de objetos ActivoInversion.
+        """
         with SessionLocal() as session:
             statement = select(AssetModel)
             records = session.scalars(statement).all()
