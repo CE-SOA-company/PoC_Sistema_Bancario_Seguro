@@ -17,6 +17,6 @@ class AssetRepository:
             statement = select(AssetModel)
             records = session.scalars(statement).all()
         return [
-            ActivoInversion(id=record.asset_id, name=record.name, classification_level=record.classification_level)
+            ActivoInversion(id=record.asset_id, name=record.name)
             for record in records
         ]
