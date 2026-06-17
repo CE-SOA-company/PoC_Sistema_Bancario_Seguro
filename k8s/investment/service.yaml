@@ -1,7 +1,12 @@
+# Archivo de configuración de Kubernetes para el Service que expone el servicio de inversiones.
 apiVersion: v1
 kind: Service
+
+# Metadatos del Service.
 metadata:
   name: investment-service
+
+# Especificación del Service, que define el selector de etiquetas, los puertos expuestos y el tipo de Service.  
 spec:
   selector:
     app: investment-service
