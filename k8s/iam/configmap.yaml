@@ -1,6 +1,13 @@
+# ConfigMap de Kubernetes para el servicio de gestión de identidades y accesos (IAM).
 apiVersion: v1
 kind: ConfigMap
+
+# Metadatos del ConfigMap para el servicio IAM.
 metadata:
+  # Nombre del ConfigMap para el servicio IAM.
   name: iam-service-config
+
+# Datos clave-valor que se almacenarán en el ConfigMap para el servicio IAM.
 data:
+  # URL de conexión a la base de datos PostgreSQL utilizada por el servicio IAM.
   DATABASE_URL: postgresql+psycopg2://iam_user:iam_pass@postgres-iam:5432/iam_db

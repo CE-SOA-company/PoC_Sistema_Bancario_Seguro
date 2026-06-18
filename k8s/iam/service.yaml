@@ -1,7 +1,12 @@
+# Configuración del Service de Kubernetes para exponer el servicio IAM.
 apiVersion: v1
 kind: Service
+
+# Metadatos del Service.
 metadata:
   name: iam-service
+
+# Especificación del Service, define el selector de etiquetas, los puertos expuestos y el tipo de Service.
 spec:
   selector:
     app: iam-service

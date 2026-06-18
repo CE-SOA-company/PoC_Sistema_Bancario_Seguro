@@ -1,7 +1,12 @@
+# Configuración del Service de Kubernetes para exponer la base de datos PostgreSQL del servicio IAM.
 apiVersion: v1
 kind: Service
+
+# Metadatos del Service.
 metadata:
   name: postgres-iam
+
+# Especificación del Service, define el selector de etiquetas, los puertos expuestos y el tipo de Service.
 spec:
   selector:
     app: postgres-iam
