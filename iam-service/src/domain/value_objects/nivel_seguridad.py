@@ -15,13 +15,19 @@ class NivelSeguridad:
     integrity: IntegrityLevel   # Criterio Biba (integridad)
 
     def puede_leer(self, requerido: "NivelSeguridad") -> bool:
-        """Bell-LaPadula — No Read Up: el clearance debe ser >= al requerido."""
+        """
+        Bell-LaPadula — No Read Up: el clearance debe ser >= al requerido.
+        """
         return self.clearance >= requerido.clearance
 
     def puede_escribir(self, requerido: "NivelSeguridad") -> bool:
-        """Biba — No Write Up: la integridad debe ser >= a la requerida."""
+        """
+        Biba — No Write Up: la integridad debe ser >= a la requerida.
+        """
         return self.integrity >= requerido.integrity
 
     def __str__(self) -> str:
-        """Muestra el nivel de seguridad de forma legible."""
+        """
+        Muestra el nivel de seguridad de forma legible.
+        """
         return f"[Clearance={self.clearance.name}, Integrity={self.integrity.name}]"

@@ -1,7 +1,12 @@
+# Configuración del Deployment de Kubernetes para el servicio de gestión de identidades y accesos (IAM).
 apiVersion: apps/v1
 kind: Deployment
+
+# Metadatos del Deployment, incluyendo su nombre.
 metadata:
   name: iam-service
+
+# Especificación del Deployment, define el número de réplicas, el selector de etiquetas y la plantilla del pod.
 spec:
   replicas: 1
   selector:
@@ -11,6 +16,8 @@ spec:
     metadata:
       labels:
         app: iam-service
+
+    # Especificación del contenedor que se ejecutará en el pod, incluyendo su nombre, imagen, puertos y variables de entorno.
     spec:
       containers:
         - name: iam-service

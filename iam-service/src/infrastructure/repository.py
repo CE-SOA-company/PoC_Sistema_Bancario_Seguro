@@ -17,7 +17,9 @@ class UserRepository:
     Propociona métodos para autenticar un usuario y recuperar su información de seguridad.
     """
     def authenticate(self, username: str, password: str) -> Usuario:
-        """Autentica a un usuario utilizando su nombre de usuario y contraseña."""
+        """
+        Autentica a un usuario utilizando su nombre de usuario y contraseña.
+        """
         
         # Consulta la base de datos para obtener el usuario por su nombre de usuario
         with SessionLocal() as session:

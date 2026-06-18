@@ -5,6 +5,14 @@ from src.infrastructure.database import Base
 
 
 class UserModel(Base):
+    """
+    Modelo de usuario para la base de datos.
+     - id:              Identificador único del usuario.
+     - username:        Nombre de usuario.
+     - password_hash:   Hash de la contraseña del usuario.
+     - clearance_level: Nivel de autorización del usuario (0-5).
+     - integrity_level: Nivel de integridad del usuario (0-5).
+    """
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
