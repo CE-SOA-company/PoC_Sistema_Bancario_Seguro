@@ -1,7 +1,12 @@
+# Configuración del service de kubernetes para el servicio del sistema bancario.
 apiVersion: v1
 kind: Service
+
+# Metadatos del Service.
 metadata:
   name: bank-service
+
+# Especificación del Service, define el selector de etiquetas, los puertos expuestos y el tipo de Service.
 spec:
   selector:
     app: bank-service

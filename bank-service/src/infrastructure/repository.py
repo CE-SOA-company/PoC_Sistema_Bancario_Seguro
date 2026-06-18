@@ -9,7 +9,11 @@ from src.infrastructure.models import AccountModel, TransactionModel
 
 
 class AccountRepository:
+    """Repositorio para manejar la comunicación con la base de datos de cuentas bancarias."""
+
     def get_by_id(self, account_id: str) -> CuentaBancaria:
+        """Obtiene una cuenta bancaria por su ID."""
+
         with SessionLocal() as session:
             statement = select(AccountModel).where(AccountModel.account_id == account_id)
             account = session.scalars(statement).first()
@@ -17,6 +21,7 @@ class AccountRepository:
         if account is None:
             raise ValueError("Account not found")
 
+        # Se convierte el registro de la base de datos a una entidad del dominio
         return CuentaBancaria(
             id=account.account_id,
             owner_id=account.owner_id,
@@ -26,20 +31,24 @@ class AccountRepository:
         )
 
     def save(self, account: CuentaBancaria) -> None:
+        """Guarda o actualiza una cuenta bancaria en la base de datos."""
+
         with SessionLocal() as session:
             statement = select(AccountModel).where(AccountModel.account_id == account.id)
             record = session.scalars(statement).first()
 
             if record is None:
+                # Se crea un nuevo registro si no existe
                 record = AccountModel(
                     account_id=account.id,
                     owner_id=account.owner_id,
                     balance=account.balance.amount,
-                    # Se persiste el valor entero del enum
+                    # Se convierte el valor del enum a int
                     required_integrity_level=int(account.required_integrity_level),
                 )
                 session.add(record)
             else:
+                # Si el registro ya existe, se actualizan los campos
                 record.owner_id = account.owner_id
                 record.balance = account.balance.amount
                 record.required_integrity_level = int(account.required_integrity_level)
@@ -48,7 +57,11 @@ class AccountRepository:
 
 
 class TransactionRepository:
+    """Repositorio para manejar la comunicación con la base de datos de transacciones."""
+
     def save(self, transaction: Transaccion) -> None:
+        """Guarda una transacción en la base de datos."""
+        
         with SessionLocal() as session:
             session.add(
                 TransactionModel(

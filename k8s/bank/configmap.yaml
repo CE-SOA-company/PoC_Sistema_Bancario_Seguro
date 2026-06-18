@@ -1,6 +1,13 @@
+# ConfigMap de Kubernetes para el servicio de gestión de identidades y accesos (Bank Service).
 apiVersion: v1
 kind: ConfigMap
+
+# Metadatos del ConfigMap para el servicio Bank Service.
 metadata:
+  # Nombre del ConfigMap para el servicio Bank Service.
   name: bank-service-config
+
+# Datos clave-valor que se almacenarán en el ConfigMap para el servicio Bank Service.
 data:
+  # URL de conexión a la base de datos PostgreSQL utilizada por el servicio Bank Service.
   DATABASE_URL: postgresql+psycopg2://bank_user:bank_pass@postgres-bank:5432/bank_db

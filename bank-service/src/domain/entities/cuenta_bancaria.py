@@ -23,35 +23,37 @@ class CuentaBancaria:
     id: str
     owner_id: str
     balance: Dinero
-    required_integrity_level: IntegrityLevel
+    required_integrity_level: IntegrityLevel # es el nivel mínimo requerido para modificar algo de esta cuenta
 
     def deposit(self, amount: Dinero, actor_integrity: IntegrityLevel) -> None:
         """
-        Aplica Biba — No Write Up antes de acreditar el monto.
+        Aplica Biba, No Write Up antes de acreditar el monto.
         Lanza PermissionError si el actor no tiene integridad suficiente.
         """
-        self._enforce_biba(actor_integrity, operation="depósito")
+        self._enforce_biba(actor_integrity, operation="depósito")  # la regla biba se valida dentro del Aggregate Root
         self.balance = Dinero(self.balance.amount + amount.amount, self.balance.currency)
 
     def withdraw(self, amount: Dinero, actor_integrity: IntegrityLevel) -> None:
         """
-        Aplica Biba — No Write Up antes de debitar el monto.
+        Aplica Biba, No Write Up antes de debitar el monto.
         Lanza PermissionError si el actor no tiene integridad suficiente.
         """
-        self._enforce_biba(actor_integrity, operation="retiro")
+
+        self._enforce_biba(actor_integrity, operation="retiro") # se realiza la validación de la regla biba
+
         if amount.amount > self.balance.amount:
             raise ValueError("Fondos insuficientes")
         self.balance = Dinero(self.balance.amount - amount.amount, self.balance.currency)
 
     def _enforce_biba(self, actor_integrity: IntegrityLevel, operation: str) -> None:
         """
-        Regla de integridad Biba — No Write Up:
+        Regla de integridad Biba, No Write Up:
         Un proceso con integridad inferior a la requerida por la cuenta
         no puede modificarla, para evitar corrupción de datos de alto valor.
         """
         if actor_integrity < self.required_integrity_level:
             raise PermissionError(
-                f"Biba — No Write Up: integridad '{actor_integrity.name}' "
+                f"Biba, No Write Up: integridad '{actor_integrity.name}' "
                 f"insuficiente para {operation} en cuenta con nivel requerido "
                 f"'{self.required_integrity_level.name}'."
             )

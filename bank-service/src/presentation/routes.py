@@ -13,6 +13,8 @@ _bearer_scheme = HTTPBearer(auto_error=True)
 
 
 class DepositRequest(BaseModel):
+    """Modelo de solicitud para depositar en una cuenta bancaria."""
+
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
@@ -21,18 +23,18 @@ class DepositRequest(BaseModel):
             }
         }
     )
-
     account_id: str = Field(description="Identificador de la cuenta", examples=["gold-001"])
     amount: float = Field(gt=0, description="Monto a depositar", examples=[50.0])
 
-
 class DepositResponse(BaseModel):
+    """Modelo de respuesta para la operación de depósito."""
+
     transaction_id: str = Field(description="Identificador único de la transacción")
     account_id: str = Field(description="Cuenta afectada")
     amount: float = Field(description="Monto depositado")
     actor_integrity_level: int = Field(description="Integridad usada en la validación Biba")
 
-
+# Modelo de endpoint para depositar en una cuenta bancaria
 @router.post(
     "/deposit",
     response_model=DepositResponse,
@@ -43,12 +45,16 @@ class DepositResponse(BaseModel):
         "a la requerida por la cuenta recibe 403 Forbidden."
     ),
 )
+# Endpoint para depositar en una cuenta bancaria
 def deposit(
     payload: DepositRequest,
-    credentials: HTTPAuthorizationCredentials = Depends(_bearer_scheme),
+    credentials: HTTPAuthorizationCredentials = Depends(_bearer_scheme)
 ) -> DepositResponse:
     try:
+        # Se decodifica el token de acceso para obtener la información del usuario, incluyendo el nivel de integridad
         claims = decode_access_token(credentials.credentials)
+        
+        # Se llama al método de depósito del procesador de transferencias, pasando el nivel de integridad del actor para aplicar la política de seguridad Biba  
         transaction = _procesador.deposit(
             account_id=payload.account_id,
             amount=payload.amount,

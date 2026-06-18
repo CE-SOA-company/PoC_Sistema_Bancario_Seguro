@@ -1,7 +1,12 @@
+# Configuración de PersistentVolumeClaim de kubernetes para la base de datos PostgreSQL del servicio del sistema bancario.
 apiVersion: v1
 kind: PersistentVolumeClaim
+
+# Metadatos del PersistentVolumeClaim, incluyendo su nombre.
 metadata:
   name: postgres-bank-pvc
+
+# Especificación del PersistentVolumeClaim, define los modos de acceso y los recursos solicitados para el almacenamiento persistente.
 spec:
   accessModes:
     - ReadWriteOnce

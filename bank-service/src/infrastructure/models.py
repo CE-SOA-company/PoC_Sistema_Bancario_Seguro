@@ -5,6 +5,8 @@ from src.infrastructure.database import Base
 
 
 class AccountModel(Base):
+    """Modelo SQLAlchemy para la tabla de cuentas"""
+
     __tablename__ = "accounts"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
@@ -15,6 +17,8 @@ class AccountModel(Base):
 
 
 class TransactionModel(Base):
+    """Modelo SQLAlchemy para la tabla de transacciones"""
+
     __tablename__ = "transactions"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)

@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./bank.db")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./bank.db") # URL de la base de datos
 
 engine = create_engine(
     DATABASE_URL,
@@ -12,12 +12,12 @@ engine = create_engine(
 )
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
-
 class Base(DeclarativeBase):
     pass
 
-
 def init_db() -> None:
+    """Inicializa la base de datos e inserta una cuenta de ejemplo, de tipo gold"""
+
     from src.infrastructure.models import AccountModel, TransactionModel
 
     Base.metadata.create_all(bind=engine)
