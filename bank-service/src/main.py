@@ -9,7 +9,6 @@ from src.presentation.routes import router as bank_router
 app = FastAPI(title="SecureBankito Bank Service")
 app.include_router(bank_router)
 
-
 @app.on_event("startup")
 def startup_event() -> None:
     for attempt in range(10):
