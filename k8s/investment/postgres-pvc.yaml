@@ -1,7 +1,12 @@
+# Archivo de configuración de Kubernetes para el PersistentVolumeClaim utilizado por PostgreSQL en el servicio de inversiones.
 apiVersion: v1
 kind: PersistentVolumeClaim
+
+# Metadatos del PersistentVolumeClaim.
 metadata:
   name: postgres-investment-pvc
+
+# Especificación del PersistentVolumeClaim, que define los modos de acceso y los recursos solicitados para el almacenamiento persistente.  
 spec:
   accessModes:
     - ReadWriteOnce

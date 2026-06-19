@@ -1,7 +1,12 @@
+# Configuración de despliegue de Kubernetes para la base de datos PostgreSQL del servicio del sistema bancario.
 apiVersion: apps/v1
 kind: Deployment
+
+# Metadatos del Deployment, incluyendo su nombre.
 metadata:
   name: postgres-bank
+
+# Especificación del Deployment, define el número de réplicas, el selector de etiquetas y la plantilla del pod.
 spec:
   replicas: 1
   selector:
@@ -11,6 +16,8 @@ spec:
     metadata:
       labels:
         app: postgres-bank
+    
+    # Especificación del contenedor que se ejecutará en el pod, incluyendo su nombre, imagen, puertos y variables de entorno.
     spec:
       containers:
         - name: postgres
@@ -27,6 +34,8 @@ spec:
           volumeMounts:
             - name: postgres-data
               mountPath: /var/lib/postgresql/data
+      
+      # Definición del volumen persistente para almacenar los datos de PostgreSQL.
       volumes:
         - name: postgres-data
           persistentVolumeClaim:

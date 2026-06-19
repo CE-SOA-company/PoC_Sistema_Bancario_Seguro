@@ -1,7 +1,12 @@
+# Archivo de configuración de Kubernetes para el Deployment del servicio de inversiones.
 apiVersion: apps/v1
 kind: Deployment
+
+# Metadatos del Deployment, incluyendo su nombre.
 metadata:
   name: investment-service
+
+# Especificación del Deployment, que define el número de réplicas, el selector de etiquetas y la plantilla del pod.
 spec:
   replicas: 1
   selector:
@@ -11,6 +16,8 @@ spec:
     metadata:
       labels:
         app: investment-service
+        
+    # Especificación del contenedor que se ejecutará en el pod, incluyendo su nombre, imagen, puertos y variables de entorno.
     spec:
       containers:
         - name: investment-service

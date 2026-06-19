@@ -1,6 +1,13 @@
+# Archivo de configuración de Kubernetes para el ConfigMap del servicio de inversiones.
 apiVersion: v1
 kind: ConfigMap
-metadata:
+
+# Metadatos del ConfigMap.
+metadata: 
+  # Nombre del ConfigMap para el servicio de inversiones.
   name: investment-service-config
-data:
-  DATABASE_URL: postgresql+psycopg2://investment_user:investment_pass@postgres-investment:5432/investment_db
+
+# Datos clave-valor que se almacenarán en el ConfigMap.   
+data: 
+  # URL de conexión a la base de datos PostgreSQL utilizada por el servicio de inversiones.
+  DATABASE_URL: postgresql+psycopg2://investment_user:investment_pass@postgres-investment:5432/investment_db 

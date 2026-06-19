@@ -5,6 +5,9 @@ from src.infrastructure.database import Base
 
 
 class AssetModel(Base):
+    """
+    Modelo de SQLAlchemy para representar um ativo financeiro na tabela "assets".
+    """
     __tablename__ = "assets"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)

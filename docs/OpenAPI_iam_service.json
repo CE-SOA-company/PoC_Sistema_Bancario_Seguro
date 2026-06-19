@@ -1,0 +1,183 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "SecureBankito IAM Service",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Autenticar usuario",
+        "description": "Emite un token JWT con clearance_level e integrity_level para los demás servicios.",
+        "operationId": "login_auth_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health Check",
+        "description": "Endpoint de salud para verificar que el servicio está funcionando correctamente.\nRetorna un mensaje de estado indicando que el servicio está operativo.",
+        "operationId": "health_check_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object",
+                  "title": "Response Health Check Health Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "LoginRequest": {
+        "properties": {
+          "username": {
+            "type": "string",
+            "title": "Username",
+            "description": "Nombre de usuario registrado",
+            "examples": [
+              "admin"
+            ]
+          },
+          "password": {
+            "type": "string",
+            "title": "Password",
+            "description": "Contraseña del usuario",
+            "examples": [
+              "admin123"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "username",
+          "password"
+        ],
+        "title": "LoginRequest",
+        "description": "Esquema de solicitud para el endpoint de login.",
+        "examples":[ {
+          "password": "admin123",
+          "username": "admin"
+        }]
+      },
+      "LoginResponse": {
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "title": "Access Token",
+            "description": "JWT con etiquetas de seguridad"
+          },
+          "token_type": {
+            "type": "string",
+            "title": "Token Type",
+            "description": "Tipo de token",
+            "default": "bearer"
+          }
+        },
+        "type": "object",
+        "required": [
+          "access_token"
+        ],
+        "title": "LoginResponse",
+        "description": "Esquema de respuesta para el endpoint de login."
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

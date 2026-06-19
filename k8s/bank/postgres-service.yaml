@@ -1,7 +1,12 @@
+# Configuración del servicio para la base de datos PostgreSQL del sistema bancario.
 apiVersion: v1
 kind: Service
+
+# Metadatos del Service.
 metadata:
   name: postgres-bank
+
+# Especificación del Service, define el selector de etiquetas, los puertos expuestos y el tipo de Service.
 spec:
   selector:
     app: postgres-bank

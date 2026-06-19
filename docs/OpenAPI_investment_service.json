@@ -1,0 +1,100 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "SecureBankito Investment Service",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/investments/assets": {
+      "get": {
+        "tags": [
+          "investments"
+        ],
+        "summary": "Listar activos VIP",
+        "description": "Lee clearance_level desde el JWT Bearer token y aplica Bell-LaPadula: un clearance inferior al requerido recibe 403 No Read Up.",
+        "operationId": "list_assets_investments_assets_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AssetResponse"
+                  },
+                  "type": "array",
+                  "title": "Response List Assets Investments Assets Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health Check",
+        "description": "Endpoint de verificación de salud para confirmar que el servicio está funcionando correctamente.",
+        "operationId": "health_check_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object",
+                  "title": "Response Health Check Health Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AssetResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id",
+            "description": "Identificador del activo VIP"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "Nombre descriptivo del activo"
+          },
+          "classification_level": {
+            "type": "integer",
+            "title": "Classification Level",
+            "description": "Nivel de clasificación requerido"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "classification_level"
+        ],
+        "title": "AssetResponse",
+        "description": "Esquema de respuesta para representar un activo VIP en la API."
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

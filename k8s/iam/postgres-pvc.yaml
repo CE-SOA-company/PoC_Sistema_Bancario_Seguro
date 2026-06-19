@@ -1,7 +1,12 @@
+# Configuración del PersistentVolumeClaim de Kubernetes para la base de datos PostgreSQL del servicio IAM.
 apiVersion: v1
 kind: PersistentVolumeClaim
+
+# Metadatos del PersistentVolumeClaim.
 metadata:
   name: postgres-iam-pvc
+
+# Especificación del PersistentVolumeClaim, define los modos de acceso y los recursos solicitados para el almacenamiento persistente.
 spec:
   accessModes:
     - ReadWriteOnce
